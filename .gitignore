@@ -52,3 +52,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Other
+*.json
+*.txt
+
+# Exemptions
+!format.json

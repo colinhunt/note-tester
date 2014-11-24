@@ -1,0 +1,95 @@
+{
+	"Differences between progressive and emergent play": 
+	{
+		"Progressive": "play happens when you follow the main storyline of the game. That would be completing a series of linear quests.",
+		"Emergent": "play happens when you define your own goals.",
+		"Features of sandbox games:": 
+		{
+			"LIST": [
+				"There tends to be few ***artificial barriers*** in the world. Cliffs, walls and rivers and so on, tend to funnel a player in a certain direction. But in GTA Three and Sandbox games, the world is pretty much wide open.",
+				"Sandbox games tend to be set in one ***seamless world*** and that means that there are few or no levels or loading screens.",
+				"There are usually many ***achievements*** and ***side quests*** that help promote exploration. And the main quest if there is one, is often ***optional***.",
+				"The player often gets to see ***day and night cycles***, and some Sandbox games even have simulated ***weather patterns*** that affect the gameplay.", 
+				"There are numerous ***non-player characters*** that lead their own lives. They have daily routines. They go to work, they go to school, they eat at restaurants and they even go home."
+			]
+		},
+		"Progressive Gameplay": {
+			"BULLETS": [
+				"***Rules*** are one of the few essential components in a game definition.",
+				{"**@Jesper Juul**, an important game scholar, outlined a number of characteristics of rules that are useful for our purposes." : 
+				{
+
+				}
+			]
+		}
+	}
+}
+
+{
+	"sections": [
+		{
+			"title": "The Title",
+			"names": ["Jesper Juul"],
+			"terms": ["Rules", "Gameplay", "challenges", "affordances", "constraints"],
+			"bullets": 
+			[
+				{
+					"definitions": 
+					{
+						"My Term": "Something I want to define."
+					}
+				},
+				{
+					"rawtext": "***Rules*** are one of the few essential components in a game definition.",
+					"terms": ["Rules"],
+					"context": ["are one of the few essential components in a game definition."]
+				},
+				{
+					"rawtext": "**Gameplay** is trying to overcome ***challenges*** presented by the rules. More concisely, **rules** are both ***affordances*** and ***constraints*** for obtaining goals.",
+					"terms": ["Gameplay", "challenges", "affordances", "constraints"],
+					"context": ["is trying to overcome", "presented by the rules. More concisely, **rules** are both", "and", "for obtaining goals."],
+					"definitions": {
+						"**rules**": "are both ***affordances*** and ***constraints*** for obtaining goals."
+					}
+				},
+				{
+					"rawtext": "**@Jesper Juul**, an important game scholar, outlined a number of characteristics of rules that are useful for our purposes.",
+					"definitions": {
+						"@Jesper Juul": "an important game scholar, outlined a number of characteristics of rules that are useful for our purposes.",
+					},
+					"list": [
+						bullet1,
+						bullet2,
+						...
+					]
+				}
+			]
+		}
+	]
+}
+
+// section
+{
+	"text": "",
+	"names": [],
+	"terms": [],
+	"bullets": [],
+	"sections": []
+}
+
+// bullet
+{
+	"headingLevel": 0,
+	"text": {
+		"rawtext": "",
+		"names": [],
+		"terms": [],
+		"context": []
+	},
+	"definitions": {
+		"":"",
+	},
+	"list": [/* numbered bullets that can be quized on */],
+	"bullets": []
+}
+
