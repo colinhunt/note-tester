@@ -6,16 +6,15 @@ import random
 import itertools
 from copy import copy
 
-
 f = open(sys.argv[1], "r")
 
 def newBullet():
 	bullet = OrderedDict()
 	bullet["headingLevel"] = -1;
 	bullet["definitions"] = OrderedDict()
-	bullet["names"] = OrderedDict()
 	bullet["bullets"] = []
 	bullet["list"] = []
+	bullet["types"] = {}
 	return bullet	
 
 doc = {
@@ -48,10 +47,15 @@ def parseNotes():
 		# for nameSent in re.finditer('(\.\s+)?\*\*@(.+?)\*\*(.*?\.)', line):
 			# bullet["names"][nameSent.group(2)] = nameSent.group(3)
 
-		bullet["names"] = re.findall('\*\*@(.+?)\*\*', line)
-		if bullet["names"]:
-			bullet["namescontext"] = re.sub('\*\*@(.+?)\*\*', "@_____", line)
+		# have a list of ('type', 'term') where type indicates the typeof the term (Person, Place, etc.)
+		# want to group by type later so we should have a structure like:
+		# type -> (terms, context) where 'terms' is all terms tagged with type in the bullet
 
+		for type, term in re.findall('\*\*([!@#$%\^&?\\/\-_])(.+?)\*\*', line):
+			bullet["types"].setdefault(type, {}).setdefault("terms", []).append(term)
+			bullet["types"][type]["context"] = re.sub('\*\*'+ type +'(.+?)\*\*', type + "_____", line)
+		
+		# TODO: Refactor below to remove duplication with above
 				# find terms and termscontext
 		bullet["terms"] = re.findall(TERM_OR_DEF, line)
 		if bullet["terms"]:
@@ -130,7 +134,7 @@ def termQuestion(bullet):
 		q["text"] = bullet["termscontext"]
 	except KeyError:
 		pass
-	return q
+	return [q]
 
 def defQuestion(bullet):
 	q = emptyQuestion(bullet)
@@ -138,7 +142,7 @@ def defQuestion(bullet):
 	if defs:
 		answer, q["text"] = random.choice(defs)
 		q["answer"] = [answer]
-	return q
+	return [q]
 
 def listQuestion(bullet):
 	q = emptyQuestion(bullet)
@@ -146,22 +150,25 @@ def listQuestion(bullet):
 		q["text"] = bullet["rawtext"]
 		q["answer"] = bullet["list"]
 		q["multipleChoice"] = False
-	return q
+	return [q]
 
-def nameQuestion(bullet):
-	q = emptyQuestion(bullet)
+def typedQuestion(bullet):
+	qs = []
 	try:
-		q["answer"] = bullet["names"]
-		q["text"] = bullet["namescontext"]
+		for values in bullet["types"].values():
+			q = emptyQuestion(bullet)
+			q["answer"] = values["terms"]
+			q["text"] = values["context"]
+			qs.append(q)
 	except KeyError:
 		pass
-	return q
+	return qs
 
 
 questionTypes = [
 	termQuestion,
 	defQuestion,
-	nameQuestion,
+	typedQuestion,
 	listQuestion
 ]
 
@@ -177,7 +184,7 @@ def anyQuestion(bullet):
 # find a random section plus term, name, definition, or list
 # find up to 4 others of the same type if possible
 def makeQuestions():
-	pool = [qType(bullet) for bullet in doc["bullets"] for qType in questionTypes]
+	pool = [q for bullet in doc["bullets"] for qType in questionTypes for q in qType(bullet)]
 	pool = [question for question in pool if question["answer"]]
 	# random.shuffle(pool)
 	# pool = [bullet for bullet in doc["bullets"] if questionFor(bullet)["answer"]]
