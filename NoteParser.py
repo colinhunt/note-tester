@@ -63,6 +63,7 @@ def parseNotes():
 				# record definitions
 
 		bullet["tags"] = re.findall('.#(\w+)', line)
+		doc["bullets"].append(bullet)
 
 		while True:
 			last_pos = f.tell()
@@ -99,7 +100,6 @@ def parseNotes():
 
 			child["parent"] = bullet["rawtext"]
 
-		doc["bullets"].append(bullet)
 		return bullet
 
 	return createBullet(f.readline(), -1, {"headingLevel": -1})
