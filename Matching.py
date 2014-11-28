@@ -31,13 +31,6 @@ class MatchingGame(object):
 def makeGames(type, partition=None):
 	questions = makeQuestions([typedQuestion(type)])
 	random.shuffle(questions)
-	games = []
 	if partition is None:
 		partition = len(questions)
-	start = 0
-	end = partition
-	while start < len(questions):
-		games.append(MatchingGame(questions[start:end]))
-		start += partition
-		end += partition
-	return games
+	return [MatchingGame(questions[i:i+partition]) for i in xrange(0, len(questions), partition)]
