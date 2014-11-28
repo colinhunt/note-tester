@@ -123,6 +123,7 @@ def emptyQuestion(bullet):
 		q["section"] = bullet["parentSection"]["rawtext"]
 		q["parent"] = bullet["parent"]
 		q["tags"] = bullet["tags"]
+		q["rawtext"] = bullet["rawtext"]
 	except KeyError:
 		pass
 	return q
@@ -152,7 +153,7 @@ def listQuestion(bullet):
 		q["multipleChoice"] = False
 	return [q]
 
-def typedQuestion(bullet):
+def allTypedQuestion(bullet):
 	qs = []
 	try:
 		for values in bullet["types"].values():
@@ -164,11 +165,23 @@ def typedQuestion(bullet):
 		pass
 	return qs
 
+def typedQuestion(type):
+	def typedQuestionFunc(bullet):
+		q = emptyQuestion(bullet)
+		try:
+			q["answer"] = bullet["types"][type]["terms"]
+			q["text"] = bullet["types"][type]["context"]
+		except KeyError:
+			pass
+		return [q]
+	return typedQuestionFunc	
+
+
 
 questionTypes = [
 	termQuestion,
 	defQuestion,
-	typedQuestion,
+	allTypedQuestion,
 	listQuestion
 ]
 
@@ -183,7 +196,7 @@ def anyQuestion(bullet):
 
 # find a random section plus term, name, definition, or list
 # find up to 4 others of the same type if possible
-def makeQuestions():
+def makeQuestions(questionTypes=questionTypes):
 	pool = [q for bullet in doc["bullets"] for qType in questionTypes for q in qType(bullet)]
 	pool = [question for question in pool if question["answer"]]
 	# random.shuffle(pool)
@@ -236,3 +249,7 @@ def makeQuestions():
 	# return mcQuestions
 	# random.shuffle(pool)
 	return pool
+
+
+def getTypes():
+	return list(set([type for bullet in doc["bullets"] for type in bullet["types"].keys()]))

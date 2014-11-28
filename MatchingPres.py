@@ -1,4 +1,5 @@
-from Matching import MatchingGame
+import sys
+from Matching import getTypes, makeGames
 
 # get a dictionary of {terms: context}
 # print the contexts out in random order enumerated
@@ -10,32 +11,38 @@ from Matching import MatchingGame
 
 types = getTypes()
 
-for i, type in enumerated(types):
+for i, type in enumerate(types):
 	print i, type
 
 s = raw_input("Please select from the above types > ")
 
-game = MatchingGame(types[int(s)])
+games = makeGames(type=types[int(s)], partition=10)
 
-while not game.isFinished():
-	try:
-		for i, termGroup in enumerated(game.termGroups()):
-			print i, termGroups
-		print
-		for i, context in enumerated(game.contexts()):
-			print i, context
+print len(games)
 
-		s = raw_input("Match the terms with their context by typing #,#<enter> > ")
+for game in games:
+	while not game.isFinished():
+		try:
+			for i, termGroup in enumerate(game.termGroups()):
+				print i, termGroup
+			print
+			for i, context in enumerate(game.contexts()):
+				print i, context
 
-		tid, cid = s.split(',');
+			s = raw_input("Match the terms with their context by typing #,#<enter> > ")
 
-		if game.play(tid, cid):
-			print "Correct!"
-		else:
-			print "Incorrect, please try again"
-	except EOFError:
-		print "\nGoodbye"
-		quit()
-	except Exception as e:
-		print "Unexpected error:", sys.exc_info()[0]
-		print e
+			tid, cid = s.split(',');
+
+			if game.play(int(tid), int(cid)):
+				print "Correct!"
+			else:
+				print "Incorrect, please try again"
+		except EOFError:
+			print "\nGoodbye"
+			exit()
+		except IndexError:
+			print "\nOops, you entered some wrong numbers!"
+		except Exception as e:
+			print "Unexpected error:", sys.exc_info()[0]
+			print e
+			exit()
